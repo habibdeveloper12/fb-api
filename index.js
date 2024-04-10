@@ -115,34 +115,38 @@ async function run() {
       }
     });
 
-    app.post("/auth/store", (req, res) => {
-      const { userId, accessToken, otherData } = req.body;
+    app.post("/auth/store", async (req, res) => {
+      const { accessToken } = req.body;
 
       try {
-        client.connect();
+        const response = await axios.get(
+          `https://graph.facebook.com/me/messages`,
+          {
+            params: {
+              access_token: accessToken,
+            },
+          }
+        );
 
-        const database = client.db("your-database-name");
-        const collection = database.collection("authenticationData");
+        await client.connect();
 
-        const result = collection.insertOne({
-          userId: userId,
-          accessToken: accessToken,
-          otherData: otherData,
-        });
+        const database = client.db("facebook_messages");
+        const collection = database.collection("messages");
 
-        console.log("Authentication data saved successfully:", result);
-        return {
-          success: true,
-          message: "Authentication data saved successfully",
-        };
+        const result = await collection.insertMany(response.data.data);
+
+        console.log("Messages saved successfully:", result);
+        res.json({ success: true, message: "Messages saved successfully" });
       } catch (error) {
-        console.error("Error saving authentication data:", error);
-        return {
-          success: false,
-          message: "Failed to save authentication data",
-        };
+        console.error("Error fetching and storing messages:", error);
+        res
+          .status(500)
+          .json({
+            success: false,
+            message: "Failed to fetch and store messages",
+          });
       } finally {
-        client.close();
+        await client.close();
       }
     });
 
