@@ -10,7 +10,7 @@ const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const port = process.env.PORT || 5000;
 
-const uri = `mongodb://localhost:27017/database?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://alexandre832222:yGSxZC4Tj2odj0r7@cluster0.qum338w.mongodb.net/database?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -139,12 +139,10 @@ async function run() {
         res.json({ success: true, message: "Messages saved successfully" });
       } catch (error) {
         console.error("Error fetching and storing messages:", error);
-        res
-          .status(500)
-          .json({
-            success: false,
-            message: "Failed to fetch and store messages",
-          });
+        res.status(500).json({
+          success: false,
+          message: "Failed to fetch and store messages",
+        });
       } finally {
         await client.close();
       }
