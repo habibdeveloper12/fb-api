@@ -10,7 +10,7 @@ const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const port = process.env.PORT || 5000;
 
-const uri = `mongodb+srv://alexandre832222:yGSxZC4Tj2odj0r7@cluster0.qum338w.mongodb.net/database?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://alexandre832222:2ro6w8zElgmbO9hc@cluster0.qum338w.mongodb.net/database?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
